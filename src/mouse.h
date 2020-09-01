@@ -81,6 +81,13 @@ void dragMouse(MMSignedPoint point, const MMMouseButton button);
  * screen boundaries), or true if successful. */
 bool smoothlyMoveMouse(MMPoint point,double speed);
 
+/* Smoothly moves the mouse from the current position to the given point.
+ * deadbeef_srand() should be called before using this function.
+ *
+ * Returns false if unsuccessful (i.e. a point was hit that is outside of the
+ * screen boundaries), or true if successful. */
+bool smoothlyDragMouse(MMPoint point,double speed);
+
 /* Returns the coordinates of the mouse on the current screen. */
 MMPoint getMousePos(void);
 

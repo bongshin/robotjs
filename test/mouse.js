@@ -56,6 +56,28 @@ describe('Mouse', () => {
 
   });
 
+  it('Drags the mouse smoothly.', function()
+  {
+    lastKnownPos = robot.dragMouseSmooth(0, 0);
+    expect(robot.dragMouseSmooth(100, 100) === 1).toBeTruthy();
+    currentPos = robot.getMousePos();
+    expect(currentPos.x).toEqual(100);
+    expect(currentPos.y).toEqual(100);
+
+    expect(function()
+    {
+      robot.dragMouseSmooth(0, 1, 2, 3);
+    }).toThrowError(/Invalid number/);
+
+    expect(function()
+    {
+      robot.dragMouseSmooth(0);
+    }).toThrowError(/Invalid number/);
+
+    expect(robot.dragMouseSmooth("0", "0") === 1).toBeTruthy();
+
+  });
+
   it('Click the mouse.', function()
   {
     expect(robot.mouseClick()).toBeTruthy();

@@ -138,6 +138,44 @@ NAN_METHOD(moveMouseSmooth)
 	info.GetReturnValue().Set(Nan::New(1));
 }
 
+NAN_METHOD(dragMouseSmooth)
+{
+	if (info.Length() > 4 || info.Length() < 2 )
+	{
+		return Nan::ThrowError("Invalid number of arguments.");
+	}
+	size_t x = Nan::To<int32_t>(info[0]).FromJust();
+	size_t y = Nan::To<int32_t>(info[1]).FromJust();
+
+	MMPoint point;
+	point = MMPointMake(x, y);
+	MMMouseButton button = LEFT_BUTTON;
+	size_t speed = 3.0;
+	if (info.Length() == 3)
+	{
+		speed = Nan::To<int32_t>(info[2]).FromJust();
+	}
+	if (info.Length() == 4)
+	{
+		Nan::Utf8String bstr(info[2]);
+		const char * const b = *bstr;
+
+		switch (CheckMouseButton(b, &button))
+		{
+			case -1:
+				return Nan::ThrowError("Null pointer in mouse button code.");
+				break;
+			case -2:
+				return Nan::ThrowError("Invalid mouse button specified.");
+				break;
+		}
+	}
+	smoothlyDragMouse(point, speed, button);
+	microsleep(mouseDelay);
+
+	info.GetReturnValue().Set(Nan::New(1));
+}
+
 NAN_METHOD(getMousePos)
 {
 	MMPoint pos = getMousePos();
@@ -878,6 +916,9 @@ NAN_MODULE_INIT(InitAll)
 
 	Nan::Set(target, Nan::New("moveMouseSmooth").ToLocalChecked(),
 		Nan::GetFunction(Nan::New<FunctionTemplate>(moveMouseSmooth)).ToLocalChecked());
+
+	Nan::Set(target, Nan::New("dragMouseSmooth").ToLocalChecked(),
+		Nan::GetFunction(Nan::New<FunctionTemplate>(dragMouseSmooth)).ToLocalChecked());
 
 	Nan::Set(target, Nan::New("getMousePos").ToLocalChecked(),
 		Nan::GetFunction(Nan::New<FunctionTemplate>(getMousePos)).ToLocalChecked());
