@@ -86,7 +86,7 @@ bool smoothlyMoveMouse(MMPoint point,double speed);
  *
  * Returns false if unsuccessful (i.e. a point was hit that is outside of the
  * screen boundaries), or true if successful. */
-bool smoothlyDragMouse(MMPoint point,double speed);
+bool smoothlyDragMouse(MMPoint point,double speed, const MMMouseButton button);
 
 /* Returns the coordinates of the mouse on the current screen. */
 MMPoint getMousePos(void);
